@@ -21,8 +21,6 @@ using pip:
 
     pip install pyaudio
 
-Example usage:
-    python transcribe_streaming_mic.py
 """
 
 # [START import_libraries]
@@ -128,8 +126,7 @@ def run_language(text):
     # Retrieve response from Natural Language's analyze_sentiment() method
     response = client.analyze_sentiment(document=document)
     sentiment = response.document_sentiment
-    sys.stdout.write(sentiment)
-    sys.stdout.flush()
+    print('Score: {}'.format(sentiment.score))
 
     
 def listen_print_loop(responses):
@@ -173,13 +170,13 @@ def listen_print_loop(responses):
         if not result.is_final:
             sys.stdout.write(transcript + overwrite_chars + '\r')
             sys.stdout.flush()
-            run_language(transcript + overwrite_chars)
+            
 
             num_chars_printed = len(transcript)
 
         else:
             print(transcript + overwrite_chars)
-
+            run_language(transcript + overwrite_chars)
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
             if re.search(r'\b(exit|quit)\b', transcript, re.I):
